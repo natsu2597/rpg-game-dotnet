@@ -1,7 +1,9 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace Rpg.Catalog.Service.Dtos;
 
 public record UpdateItemDto(
-        string Name,
+        [Required] string Name,
         string Description,
-        decimal Price
+        [Range(0,50000)] decimal Price
     );

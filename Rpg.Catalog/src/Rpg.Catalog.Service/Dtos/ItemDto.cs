@@ -5,5 +5,5 @@ public record ItemDto(
         string Name,
         string Description,
         decimal Price,
-        DateTimeOffset CreatedAt
+        DateTimeOffset CreatedDate
     );
