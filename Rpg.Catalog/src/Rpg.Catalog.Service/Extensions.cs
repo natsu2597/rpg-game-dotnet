@@ -10,11 +10,6 @@ public static class Extensions
         return new ItemDto(item.Id, item.Name, item.Description, item.Price, item.CreatedDate);
     }
 
-    public static Item AsModel(this ItemDto itemDto)
-    {
-        return new Item(itemDto.Id, itemDto.Name, itemDto.Description, itemDto.Price, itemDto.CreatedDate);
-    }
-
     public static void UpdateFromDto(this Item item, UpdateItemDto dto)
     {
         item.Name = dto.Name;
