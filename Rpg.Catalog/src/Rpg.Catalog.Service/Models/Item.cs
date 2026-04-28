@@ -2,7 +2,7 @@ using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 namespace Rpg.Catalog.Service.Models;
 
-public class Item
+public class Item : IModel
 {
     [BsonId]
     [BsonRepresentation(BsonType.String)]

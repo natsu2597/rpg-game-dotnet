@@ -10,7 +10,12 @@ namespace Rpg.Catalog.Service.Controllers;
 [Route("items")]
 public class ItemController : ControllerBase
 {
-    private readonly ItemsRepository itemsRepository = new();
+    private readonly IRepository<Item> itemsRepository;
+
+    public ItemController(IRepository<Item> itemsRepository)
+    {
+        this.itemsRepository = itemsRepository;
+    }
 
     [HttpGet]
     public async Task<IEnumerable<ItemDto>> GetItemsAsync()

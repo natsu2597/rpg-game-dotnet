@@ -1,9 +1,36 @@
+using MongoDB.Bson.Serialization;
+using MongoDB.Bson.Serialization.Serializers;
+using MongoDB.Driver;
+using Rpg.Catalog.Service.Models;
+using Rpg.Catalog.Service.Repositories;
+using Rpg.Catalog.Service.Settings;
+
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+    });
+});
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+
+var serviceSettings = builder.Configuration
+    .GetSection(nameof(ServiceSettings))
+    .Get<ServiceSettings>();
+
+builder.Services.AddMongo()
+    .AddMongoRepository<Item>("items");
+
 builder.Services.AddControllers();
+
+BsonSerializer.RegisterSerializer(new GuidSerializer(MongoDB.Bson.BsonType.String));
 
 var app = builder.Build();
 
@@ -15,6 +42,7 @@ app.UseSwaggerUI(c =>
     c.RoutePrefix = string.Empty;
 });
 
+app.UseCors("AllowAll");
 
 app.MapControllers();
 
