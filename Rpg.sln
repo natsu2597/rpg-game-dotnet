@@ -9,6 +9,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{46908D89-5FC
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rpg.Catalog.Service", "Rpg.Catalog\src\Rpg.Catalog.Service\Rpg.Catalog.Service.csproj", "{3C2AC048-4D18-4890-AFB2-9F7288107126}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Rpg.Common", "Rpg.Common", "{AD35E5F2-2032-51BF-3C25-0C4ECC926290}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{317048E6-9FAB-62AB-48AF-0E5037DD09E8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rpg.Common", "Rpg.Common\src\Rpg.Common\Rpg.Common.csproj", "{CA1F265E-B358-477A-A2A7-6AEAA2574719}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -31,6 +37,18 @@ Global
 		{3C2AC048-4D18-4890-AFB2-9F7288107126}.Release|x64.Build.0 = Release|Any CPU
 		{3C2AC048-4D18-4890-AFB2-9F7288107126}.Release|x86.ActiveCfg = Release|Any CPU
 		{3C2AC048-4D18-4890-AFB2-9F7288107126}.Release|x86.Build.0 = Release|Any CPU
+		{CA1F265E-B358-477A-A2A7-6AEAA2574719}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CA1F265E-B358-477A-A2A7-6AEAA2574719}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CA1F265E-B358-477A-A2A7-6AEAA2574719}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{CA1F265E-B358-477A-A2A7-6AEAA2574719}.Debug|x64.Build.0 = Debug|Any CPU
+		{CA1F265E-B358-477A-A2A7-6AEAA2574719}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{CA1F265E-B358-477A-A2A7-6AEAA2574719}.Debug|x86.Build.0 = Debug|Any CPU
+		{CA1F265E-B358-477A-A2A7-6AEAA2574719}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CA1F265E-B358-477A-A2A7-6AEAA2574719}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CA1F265E-B358-477A-A2A7-6AEAA2574719}.Release|x64.ActiveCfg = Release|Any CPU
+		{CA1F265E-B358-477A-A2A7-6AEAA2574719}.Release|x64.Build.0 = Release|Any CPU
+		{CA1F265E-B358-477A-A2A7-6AEAA2574719}.Release|x86.ActiveCfg = Release|Any CPU
+		{CA1F265E-B358-477A-A2A7-6AEAA2574719}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -38,5 +56,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{46908D89-5FC0-81A5-60B7-F0CE7D303413} = {2440C6DF-4E16-FDDF-04C1-A0B59CFD15F0}
 		{3C2AC048-4D18-4890-AFB2-9F7288107126} = {46908D89-5FC0-81A5-60B7-F0CE7D303413}
+		{317048E6-9FAB-62AB-48AF-0E5037DD09E8} = {AD35E5F2-2032-51BF-3C25-0C4ECC926290}
+		{CA1F265E-B358-477A-A2A7-6AEAA2574719} = {317048E6-9FAB-62AB-48AF-0E5037DD09E8}
 	EndGlobalSection
 EndGlobal
