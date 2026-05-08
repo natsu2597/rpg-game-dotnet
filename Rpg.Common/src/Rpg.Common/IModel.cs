@@ -1,4 +1,4 @@
-namespace Rpg.Catalog.Service.Models;
+namespace Rpg.Common;
 
 public interface IModel
 {

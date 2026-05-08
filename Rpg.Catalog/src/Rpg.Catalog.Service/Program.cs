@@ -2,8 +2,9 @@ using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Serializers;
 using MongoDB.Driver;
 using Rpg.Catalog.Service.Models;
-using Rpg.Catalog.Service.Repositories;
-using Rpg.Catalog.Service.Settings;
+using Rpg.Common;
+using Rpg.Common.Settings;
+using Rpg.Common.MongoDb;
 
 var builder = WebApplication.CreateBuilder(args);
 

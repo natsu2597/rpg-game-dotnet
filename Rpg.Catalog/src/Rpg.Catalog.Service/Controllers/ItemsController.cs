@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Rpg.Catalog.Service.Dtos;
 using Rpg.Catalog.Service.Models;
-using Rpg.Catalog.Service.Repositories;
+using Rpg.Common;
 
 namespace Rpg.Catalog.Service.Controllers;
 

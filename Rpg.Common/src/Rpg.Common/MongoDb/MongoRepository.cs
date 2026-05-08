@@ -1,7 +1,7 @@
 using MongoDB.Driver;
-using Rpg.Catalog.Service.Models;
+using System.Linq.Expressions;
 
-namespace Rpg.Catalog.Service.Repositories;
+namespace Rpg.Common.MongoDb;
 
 public class MongoRepository<T> : IRepository<T> where T : IModel
 {
@@ -21,9 +21,19 @@ public class MongoRepository<T> : IRepository<T> where T : IModel
         return await dbCollection.Find(filterBuilder.Empty).ToListAsync();
     }
 
+    public async Task<IReadOnlyCollection<T>> GetAllItemAsync(Expression<Func<T, bool>> filter)
+    {
+        return await dbCollection.Find(filter).ToListAsync();
+    }
+
     public async Task<T> GetItemAsync(Guid id)
     {
         FilterDefinition<T> filter = filterBuilder.Eq(entity => entity.Id, id);
+        return await dbCollection.Find(filter).FirstOrDefaultAsync();
+    }
+
+    public async Task<T> GetItemAsync(Expression<Func<T, bool>> filter)
+    {
         return await dbCollection.Find(filter).FirstOrDefaultAsync();
     }
 
@@ -48,5 +58,7 @@ public class MongoRepository<T> : IRepository<T> where T : IModel
         await dbCollection.DeleteOneAsync(filter);
     }
 
+    
 
+    
 }

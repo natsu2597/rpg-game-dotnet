@@ -1,8 +1,9 @@
-﻿using MongoDB.Driver;
-using Rpg.Catalog.Service.Models;
-using Rpg.Catalog.Service.Settings;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using MongoDB.Driver;
+using Rpg.Common.Settings;
 
-namespace Rpg.Catalog.Service.Repositories
+namespace Rpg.Common.MongoDb
 {
     public static class Extension
     {

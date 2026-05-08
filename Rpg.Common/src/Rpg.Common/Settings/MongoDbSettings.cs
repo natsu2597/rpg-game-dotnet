@@ -1,4 +1,4 @@
-namespace Rpg.Catalog.Service.Settings;
+namespace Rpg.Common.Settings;
 
 public class MongoDbSettings
 {
