@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 18
-VisualStudioVersion = 18.5.11723.231 stable
+VisualStudioVersion = 18.5.11723.231
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Rpg.Catalog", "Rpg.Catalog", "{2440C6DF-4E16-FDDF-04C1-A0B59CFD15F0}"
 EndProject
@@ -19,6 +19,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Rpg.Infra", "Rpg.Infra", "{
 	ProjectSection(SolutionItems) = preProject
 		docker-compose.yml = docker-compose.yml
 	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Rpg.Inventory", "Rpg.Inventory", "{F6EE3C79-30BA-0395-A64E-1F318DC84884}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{8D4A21A4-22D0-C0F3-40C5-1529084F53C0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rpg.Inventory.Service", "Rpg.Inventory\src\Rpg.Inventory.Service\Rpg.Inventory.Service.csproj", "{65053005-584D-4F52-914C-36BDCE1B645F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -54,6 +60,18 @@ Global
 		{CA1F265E-B358-477A-A2A7-6AEAA2574719}.Release|x64.Build.0 = Release|Any CPU
 		{CA1F265E-B358-477A-A2A7-6AEAA2574719}.Release|x86.ActiveCfg = Release|Any CPU
 		{CA1F265E-B358-477A-A2A7-6AEAA2574719}.Release|x86.Build.0 = Release|Any CPU
+		{65053005-584D-4F52-914C-36BDCE1B645F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{65053005-584D-4F52-914C-36BDCE1B645F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{65053005-584D-4F52-914C-36BDCE1B645F}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{65053005-584D-4F52-914C-36BDCE1B645F}.Debug|x64.Build.0 = Debug|Any CPU
+		{65053005-584D-4F52-914C-36BDCE1B645F}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{65053005-584D-4F52-914C-36BDCE1B645F}.Debug|x86.Build.0 = Debug|Any CPU
+		{65053005-584D-4F52-914C-36BDCE1B645F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{65053005-584D-4F52-914C-36BDCE1B645F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{65053005-584D-4F52-914C-36BDCE1B645F}.Release|x64.ActiveCfg = Release|Any CPU
+		{65053005-584D-4F52-914C-36BDCE1B645F}.Release|x64.Build.0 = Release|Any CPU
+		{65053005-584D-4F52-914C-36BDCE1B645F}.Release|x86.ActiveCfg = Release|Any CPU
+		{65053005-584D-4F52-914C-36BDCE1B645F}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -63,6 +81,8 @@ Global
 		{3C2AC048-4D18-4890-AFB2-9F7288107126} = {46908D89-5FC0-81A5-60B7-F0CE7D303413}
 		{317048E6-9FAB-62AB-48AF-0E5037DD09E8} = {AD35E5F2-2032-51BF-3C25-0C4ECC926290}
 		{CA1F265E-B358-477A-A2A7-6AEAA2574719} = {317048E6-9FAB-62AB-48AF-0E5037DD09E8}
+		{8D4A21A4-22D0-C0F3-40C5-1529084F53C0} = {F6EE3C79-30BA-0395-A64E-1F318DC84884}
+		{65053005-584D-4F52-914C-36BDCE1B645F} = {8D4A21A4-22D0-C0F3-40C5-1529084F53C0}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6D389298-44B3-44FB-9B12-567099E5BBDE}
