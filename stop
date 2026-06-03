@@ -1,0 +1,203 @@
+[33mcommit 94cca2cacc04612d59f3e00e951de594e9ffd722[m
+tree c1cd1975586701e2e957efc7ff68b5e4f4dc6cff
+author natsu2597 <atulrishi1997@gmail.com> 1780475996 +0530
+committer natsu2597 <atulrishi1997@gmail.com> 1780475996 +0530
+
+    Wait, Retry and circuit Breaker implemented
+
+[1mdiff --git a/.gitignore b/.gitignore[m
+[1mnew file mode 100644[m
+[1mindex 0000000..d40ffd8[m
+[1m--- /dev/null[m
+[1m+++ b/.gitignore[m
+[36m@@ -0,0 +1,15 @@[m
+[32m+[m[32m# Visual Studio[m
+[32m+[m[32m.vs/[m
+[32m+[m[32m*.user[m
+[32m+[m[32m*.suo[m
+[32m+[m
+[32m+[m[32m# Build folders[m
+[32m+[m[32mbin/[m
+[32m+[m[32mobj/[m
+[32m+[m
+[32m+[m[32m# Logs[m
+[32m+[m[32m*.log[m
+[32m+[m
+[32m+[m[32m# OS files[m
+[32m+[m[32m.DS_Store[m
+[32m+[m[32mThumbs.db[m
+\ No newline at end of file[m
+[1mdiff --git a/Rpg.Catalog/src/Rpg.Catalog.Service/Controllers/ItemsController.cs b/Rpg.Catalog/src/Rpg.Catalog.Service/Controllers/ItemsController.cs[m
+[1mnew file mode 100644[m
+[1mindex 0000000..e9a399e[m
+[1m--- /dev/null[m
+[1m+++ b/Rpg.Catalog/src/Rpg.Catalog.Service/Controllers/ItemsController.cs[m
+[36m@@ -0,0 +1,103 @@[m
+[32m+[m[32musing Microsoft.AspNetCore.Mvc;[m
+[32m+[m[32musing Rpg.Catalog.Service.Dtos;[m
+[32m+[m[32musing Rpg.Catalog.Service.Models;[m
+[32m+[m[32musing Rpg.Common;[m
+[32m+[m
+[32m+[m[32mnamespace Rpg.Catalog.Service.Controllers;[m
+[32m+[m
+[32m+[m
+[32m+[m[32m[ApiController][m
+[32m+[m[32m[Route("items")][m
+[32m+[m[32mpublic class ItemController : ControllerBase[m
+[32m+[m[32m{[m
+[32m+[m[32m    private readonly IRepository<Item> itemsRepository;[m
+[32m+[m[32m    private static int requestCounter = 0;[m
+[32m+[m
+[32m+[m[32m    public ItemController(IRepository<Item> itemsRepository)[m
+[32m+[m[32m    {[m
+[32m+[m[32m        this.itemsRepository = itemsRepository;[m
+[32m+[m[32m    }[m
+[32m+[m
+[32m+[m[32m    [HttpGet][m
+[32m+[m[32m    public async Task<ActionResult<IEnumerable<ItemDto>>> GetItemsAsync()[m
+[32m+[m[32m    {[m
+[32m+[m[32m        requestCounter++;[m
+[32m+[m[32m        Console.WriteLine($"Request {requestCounter}: Starting");[m
+[32m+[m
+[32m+[m[32m        if(requestCounter <= 2)[m
+[32m+[m[32m        {[m
+[32m+[m[32m            Console.WriteLine($"Request {requestCounter}: Delaying");[m
+[32m+[m[32m            await Task.Delay(TimeSpan.FromSeconds(10));[m
+[32m+[m[32m        }[m
+[32m+[m
+[32m+[m[32m        if (requestCounter <= 4)[m
+[32m+[m[32m        {[m
+[32m+[m[32m            Console.WriteLine($"Request {requestCounter}: 500 (Internal Server Error)");[m
+[32m+[m[32m            return StatusCode(500);[m
+[32m+[m[32m        }[m
+[32m+[m
+[32m+[m[32m        var items = (await itemsRepository.GetAllItemAsync())[m
+[32m+[m[32m            .Select(item => item.AsDto());[m
+[32m+[m
+[32m+[m[32m        Console.WriteLine($"Request {requestCounter}: 200 (Ok)");[m
+[32m+[m
+[32m+[m[32m        return Ok(items);[m
+[32m+[m[32m    }[m
+[32m+[m
+[32m+[m
+[32m+[m[32m    [HttpGet("{id}")][m
+[32m+[m[32m    public async Task<ActionResult<ItemDto>> GetItemByIdAsync(Guid id)[m
+[32m+[m[32m    {[m
+[32m+[m[32m        var item = (await itemsRepository.GetItemAsync(id));[m
+[32m+[m
+[32m+[m[32m        if(item == null)[m
+[32m+[m[32m        {[m
+[32m+[m[32m            return NotFound();[m
+[32m+[m[32m        }[m
+[32m+[m
+[32m+[m[32m        return item.AsDto();[m
+[32m+[m[32m    }[m
+[32m+[m
+[32m+[m[32m    [HttpPost][m
+[32m+[m[32m    public async Task<ActionResult<ItemDto>> CreateNewItemAsync(CreateItemDto newItem)[m
+[32m+[m[32m    {[m
+[32m+[m[32m        var item = new Item[m
+[32m+[m[32m        {[m
+[32m+[m[32m            Name = newItem.Name,[m
+[32m+[m[32m            Description = newItem.Description,[m
+[32m+[m[32m            Price = newItem.Price,[m
+[32m+[m[32m            CreatedDate = DateTimeOffset.UtcNow[m
+[32m+[m[32m        };[m
+[32m+[m[41m        [m
+[32m+[m[32m        await itemsRepository.CreateItemAsync(item);[m
+[32m+[m
+[32m+[m[32m        return CreatedAtAction(nameof(GetItemByIdAsync), new { id = item.Id }, item.AsDto());[m
+[32m+[m[32m    }[m
+[32m+[m
+[32m+[m[32m    [HttpPut("{id}")][m
+[32m+[m[32m    public async Task<IActionResult> UpdateItem(Guid id, UpdateItemDto updatedItemDto)[m
+[32m+[m[32m    {[m
+[32m+[m[32m        var existingItem = await itemsRepository.GetItemAsync(id);[m
+[32m+[m[32m        if(existingItem == null)[m
+[32m+[m[32m        {[m
+[32m+[m[32m            return NotFound();[m
+[32m+[m[32m        }[m
+[32m+[m
+[32m+[m[32m        existingItem.UpdateFromDto(updatedItemDto);[m
+[32m+[m
+[32m+[m[32m        await itemsRepository.UpdateItemAsync(existingItem);[m
+[32m+[m
+[32m+[m[32m        return NoContent();[m
+[32m+[m
+[32m+[m[32m    }[m
+[32m+[m
+[32m+[m[32m    [HttpDelete("{id}")][m
+[32m+[m[32m    public async Task<IActionResult> DeleteItem(Guid id)[m
+[32m+[m[32m    {[m
+[32m+[m[32m        var item = await itemsRepository.GetItemAsync(id);[m
+[32m+[m[32m        if(item == null) { return NotFound(); }[m
+[32m+[m
+[32m+[m[32m        await itemsRepository.DeleteItemAsync(item.Id);[m
+[32m+[m[32m        return NoContent();[m
+[32m+[m[32m    }[m
+[32m+[m[32m}[m
+\ No newline at end of file[m
+[1mdiff --git a/Rpg.Catalog/src/Rpg.Catalog.Service/Dtos/CreateItemDto.cs b/Rpg.Catalog/src/Rpg.Catalog.Service/Dtos/CreateItemDto.cs[m
+[1mnew file mode 100644[m
+[1mindex 0000000..0bc74d5[m
+[1m--- /dev/null[m
+[1m+++ b/Rpg.Catalog/src/Rpg.Catalog.Service/Dtos/CreateItemDto.cs[m
+[36m@@ -0,0 +1,9 @@[m
+[32m+[m[32musing System.ComponentModel.DataAnnotations;[m
+[32m+[m
+[32m+[m[32mnamespace Rpg.Catalog.Service.Dtos;[m
+[32m+[m
+[32m+[m[32mpublic record CreateItemDto([m
+[32m+[m[32m        [Required]string Name,[m
+[32m+[m[32m        [Required]string Description,[m
+[32m+[m[32m        [Required][Range(0,50000)]decimal Price[m
+[32m+[m[32m    );[m
+\ No newline at end of file[m
+[1mdiff --git a/Rpg.Catalog/src/Rpg.Catalog.Service/Dtos/ItemDto.cs b/Rpg.Catalog/src/Rpg.Catalog.Service/Dtos/ItemDto.cs[m
+[1mnew file mode 100644[m
+[1mindex 0000000..52a4774[m
+[1m--- /dev/null[m
+[1m+++ b/Rpg.Catalog/src/Rpg.Catalog.Service/Dtos/ItemDto.cs[m
+[36m@@ -0,0 +1,9 @@[m
+[32m+[m[32mnamespace Rpg.Catalog.Service.Dtos;[m
+[32m+[m
+[32m+[m[32mpublic record ItemDto([m
+[32m+[m[32m        Guid Id,[m
+[32m+[m[32m        string Name,[m
+[32m+[m[32m        string Description,[m
+[32m+[m[32m        decimal Price,[m
+[32m+[m[32m        DateTimeOffset CreatedDate[m
+[32m+[m[32m    );[m
+\ No newline at end of file[m
+[1mdiff --git a/Rpg.Catalog/src/Rpg.Catalog.Service/Dtos/UpdateItemDto.cs b/Rpg.Catalog/src/Rpg.Catalog.Service/Dtos/UpdateItemDto.cs[m
+[1mnew file mode 100644[m
+[1mindex 0000000..9cb3eab[m
+[1m--- /dev/null[m
+[1m+++ b/Rpg.Catalog/src/Rpg.Catalog.Service/Dtos/UpdateItemDto.cs[m
+[36m@@ -0,0 +1,9 @@[m
+[32m+[m[32musing System.ComponentModel.DataAnnotations;[m
+[32m+[m
+[32m+[m[32mnamespace Rpg.Catalog.Service.Dtos;[m
+[32m+[m
+[32m+[m[32mpublic record UpdateItemDto([m
+[32m+[m[32m        [Required] string Name,[m
+[32m+[m[32m        string Description,[m
+[32m+[m[32m        [Range(0,50000)] decimal Price[m
+[32m+[m[32m    );[m
+\ No newline at end of file[m
+[1mdiff --git a/Rpg.Catalog/src/Rpg.Catalog.Service/Extensions.cs b/Rpg.Catalog/src/Rpg.Catalog.Service/Extensions.cs[m
+[1mnew file mode 100644[m
+[1mindex 0000000..76d1f67[m
+[1m--- /dev/null[m
+[1m+++ b/Rpg.Catalog/src/Rpg.Catalog.Service/Extensions.cs[m
+[36m@@ -0,0 +1,19 @@[m
+[32m+[m[32musing Rpg.Catalog.Service.Dtos;[m
+[32m+[m[32musing Rpg.Catalog.Service.Models;[m
+[32m+[m
+[32m+[m[32mnamespace Rpg.Catalog.Service;[m
+[32m+[m
+[32m+[m[32mpublic static class Extensions[m
+[32m+[m[32m{[m
+[32m+[m[32m    public static ItemDto AsDto(this Item item)[m
+[32m+[m[32m    {[m
+[32m+[m[32m        return new ItemDto(item.Id, item.Name, item.Desc
