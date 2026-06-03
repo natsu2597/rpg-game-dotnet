@@ -1,7 +1,9 @@
+using MassTransit;
 using Microsoft.AspNetCore.Mvc;
 using Rpg.Catalog.Service.Dtos;
 using Rpg.Catalog.Service.Models;
 using Rpg.Common;
+using Rpg.Contracts;
 
 namespace Rpg.Catalog.Service.Controllers;
 
@@ -11,41 +13,27 @@ namespace Rpg.Catalog.Service.Controllers;
 public class ItemController : ControllerBase
 {
     private readonly IRepository<Item> itemsRepository;
-    private static int requestCounter = 0;
+    private readonly IPublishEndpoint publishEndpoint;
 
-    public ItemController(IRepository<Item> itemsRepository)
+    public ItemController(IRepository<Item> itemsRepository, IPublishEndpoint publishEndpoint)
     {
         this.itemsRepository = itemsRepository;
+        this.publishEndpoint = publishEndpoint;
     }
 
     [HttpGet]
     public async Task<ActionResult<IEnumerable<ItemDto>>> GetItemsAsync()
     {
-        requestCounter++;
-        Console.WriteLine($"Request {requestCounter}: Starting");
-
-        if(requestCounter <= 2)
-        {
-            Console.WriteLine($"Request {requestCounter}: Delaying");
-            await Task.Delay(TimeSpan.FromSeconds(10));
-        }
-
-        if (requestCounter <= 4)
-        {
-            Console.WriteLine($"Request {requestCounter}: 500 (Internal Server Error)");
-            return StatusCode(500);
-        }
+       
 
         var items = (await itemsRepository.GetAllItemAsync())
             .Select(item => item.AsDto());
-
-        Console.WriteLine($"Request {requestCounter}: 200 (Ok)");
 
         return Ok(items);
     }
 
 
-    [HttpGet("{id}")]
+    [HttpGet("{id}",Name = "GetItemById")]
     public async Task<ActionResult<ItemDto>> GetItemByIdAsync(Guid id)
     {
         var item = (await itemsRepository.GetItemAsync(id));
@@ -71,7 +59,20 @@ public class ItemController : ControllerBase
         
         await itemsRepository.CreateItemAsync(item);
 
-        return CreatedAtAction(nameof(GetItemByIdAsync), new { id = item.Id }, item.AsDto());
+        try
+        {
+            await publishEndpoint.Publish(
+                new CatalogItemCreated(item.Id, item.Name, item.Description));
+
+            Console.WriteLine("Published successfully");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex);
+            throw;
+        }
+
+        return CreatedAtAction("GetItemById", new { id = item.Id }, item.AsDto());
     }
 
     [HttpPut("{id}")]
@@ -87,6 +88,8 @@ public class ItemController : ControllerBase
 
         await itemsRepository.UpdateItemAsync(existingItem);
 
+        await publishEndpoint.Publish(new CatalogItemUpdated(existingItem.Id, existingItem.Name, existingItem.Description));
+
         return NoContent();
 
     }
@@ -98,6 +101,9 @@ public class ItemController : ControllerBase
         if(item == null) { return NotFound(); }
 
         await itemsRepository.DeleteItemAsync(item.Id);
+
+        await publishEndpoint.Publish(new CatalogItemDeleted(id));
+
         return NoContent();
     }
 }

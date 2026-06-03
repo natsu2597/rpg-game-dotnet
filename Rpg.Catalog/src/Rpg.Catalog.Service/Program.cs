@@ -5,6 +5,8 @@ using Rpg.Catalog.Service.Models;
 using Rpg.Common;
 using Rpg.Common.Settings;
 using Rpg.Common.MongoDb;
+using MassTransit;
+using Rpg.Catalog.Service.Settings;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,6 +32,21 @@ var serviceSettings = builder.Configuration
 
 builder.Services.AddMongo()
     .AddMongoRepository<Item>("items");
+
+builder.Services.AddMassTransit(x =>
+{
+    x.UsingRabbitMq((context, configurator) =>
+    {
+        var rabbitMQSettings = builder.Configuration
+            .GetSection(nameof(RabbitMQSettings))
+            .Get<RabbitMQSettings>()
+            ?? throw new Exception("RabbitMQ settings missing");
+
+        configurator.Host(rabbitMQSettings.Host);
+        configurator.ConfigureEndpoints(context,new KebabCaseEndpointNameFormatter(serviceSettings!.ServiceName,false));
+    });
+});
+
 
 builder.Services.AddControllers();
 

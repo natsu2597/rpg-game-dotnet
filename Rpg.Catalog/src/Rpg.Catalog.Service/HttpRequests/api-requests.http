@@ -8,9 +8,9 @@ POST {{Rpg.Api_HostAddress}}/items
 Content-Type: application/json
 
 {
-  "name": "Healing Herbs",
-  "description": "Increases 300 HP",
-  "price": 300
+  "name": "Molotov",
+  "description": "Deals 300 Fire Damage",
+  "price": 250
 }
 
 ###
