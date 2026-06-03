@@ -1,0 +1,20 @@
+# For more info on HTTP files go to https://aka.ms/vs/httpfile
+@Rpg.Api_HostAddress = http://localhost:5052
+
+GET {{Rpg.Api_HostAddress}}/items?userId=2991ab6f-0530-478f-bc07-a2d8614923c6
+
+###
+POST {{Rpg.Api_HostAddress}}/items
+Content-Type: application/json
+
+{
+  "userId": "2991ab6f-0530-478f-bc07-a2d8614923c6",
+  "catalogItemId": "f334b2d1-4f4a-4a56-a2cc-633a15f0264f",
+  "quantity": 4
+}
+
+###
+GET http://localhost:5177/items
+
+###
+GET http://localhost:5177/items
