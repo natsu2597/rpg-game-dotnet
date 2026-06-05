@@ -1,6 +1,4 @@
-﻿using BCrypt.Net;
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Rpg.Common;
 using Rpg.Identity.Service.Dtos;
 using Rpg.Identity.Service.Jwt;

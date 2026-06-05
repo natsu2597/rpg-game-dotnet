@@ -8,9 +8,9 @@ POST {{Rpg.Api_HostAddress}}/users/register
 Content-Type: application/json
 
 {
-  "username": "natsu2597",
-  "email": "atulrishi2597@gmail.com",
-  "password": "natsuSAMA@12345"
+  "username": "yeshu420",
+  "email": "yashrishi2001@gmail.com",
+  "password": "password@12345"
 }
 
 ###

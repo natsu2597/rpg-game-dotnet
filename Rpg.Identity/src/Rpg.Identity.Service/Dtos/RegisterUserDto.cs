@@ -5,7 +5,7 @@ namespace Rpg.Identity.Service.Dtos
     public record RegisterUserDto
     (
         [Required]string Username,
-        [Required] string Email,
+        [Required][EmailAddress] string Email,
         [Required] string Password
     );
 }
