@@ -10,13 +10,13 @@ namespace Rpg.Inventory.Service.Controllers
     [Route("items")]
     public class ItemsContoller : ControllerBase
     {
-        private readonly IRepository<InventoryItem> itemsRepository;
-        private readonly CatalogClient catalogClient;
+        private readonly IRepository<InventoryItem> inventoryItemsRepository;
+        private readonly IRepository<CatalogItem> catalogItemsRepository;
 
-        public ItemsContoller(IRepository<InventoryItem> itemsRepository,CatalogClient catalogClient)
+        public ItemsContoller(IRepository<InventoryItem> inventoryItemsRepository,IRepository<CatalogItem> catalogItemsRepository)
         {
-            this.itemsRepository = itemsRepository;
-            this.catalogClient = catalogClient;
+            this.inventoryItemsRepository = inventoryItemsRepository;
+            this.catalogItemsRepository = catalogItemsRepository;
         }
 
         [HttpGet]
@@ -27,8 +27,10 @@ namespace Rpg.Inventory.Service.Controllers
                 return BadRequest();
             }
 
-            var catalogItems = await catalogClient.GetCatalogItemsAsync();
-            var inventoryItems = await itemsRepository.GetAllItemAsync(item => item.UserId == userId);
+            var inventoryItems = await inventoryItemsRepository.GetAllItemAsync(item => item.UserId == userId);
+            var itemIds = inventoryItems.Select(item => item.CatalogItemId);
+
+            var catalogItems = await catalogItemsRepository.GetAllItemAsync(item => itemIds.Contains(item.Id));
             var items = inventoryItems.Select(inventoryItem =>
             {
                 var catalogItem = catalogItems.Single(catalogItem => catalogItem.Id == inventoryItem.CatalogItemId);
