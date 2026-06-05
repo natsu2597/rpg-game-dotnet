@@ -43,7 +43,7 @@ namespace Rpg.Inventory.Service.Controllers
         [HttpPost]
         public async Task<ActionResult> GrantItemAsync(GrantItemsDto grantItemsDto)
         {
-            var inventoryItem = await itemsRepository.GetItemAsync(
+            var inventoryItem = await inventoryItemsRepository.GetItemAsync(
                     item => item.UserId == grantItemsDto.UserId && item.CatalogItemId == grantItemsDto.CatalogItemId
                 );
 
@@ -57,13 +57,13 @@ namespace Rpg.Inventory.Service.Controllers
                     AcquiredDate = DateTimeOffset.UtcNow,
                 };
 
-                await itemsRepository.CreateItemAsync(inventoryItem);
+                await inventoryItemsRepository.CreateItemAsync(inventoryItem);
             }
 
             else
             {
                 inventoryItem.Quantity += grantItemsDto.Quantity;
-                await itemsRepository.UpdateItemAsync(inventoryItem);
+                await inventoryItemsRepository.UpdateItemAsync(inventoryItem);
             }
 
             return Ok(inventoryItem);
