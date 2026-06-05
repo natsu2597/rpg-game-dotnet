@@ -8,8 +8,8 @@ POST {{Rpg.Api_HostAddress}}/items
 Content-Type: application/json
 
 {
-  "name": "Molotov",
-  "description": "Deals 300 Fire Damage",
+  "name": "Icicle",
+  "description": "Deals 300 Ice Damage",
   "price": 250
 }
 

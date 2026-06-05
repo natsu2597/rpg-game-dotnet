@@ -1,12 +1,9 @@
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Serializers;
-using MongoDB.Driver;
 using Rpg.Catalog.Service.Models;
-using Rpg.Common;
 using Rpg.Common.Settings;
 using Rpg.Common.MongoDb;
-using MassTransit;
-using Rpg.Catalog.Service.Settings;
+using Rpg.Common.MassTransit;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,21 +28,12 @@ var serviceSettings = builder.Configuration
     .Get<ServiceSettings>();
 
 builder.Services.AddMongo()
-    .AddMongoRepository<Item>("items");
+    .AddMongoRepository<Item>("items")
+    .AddMassTransitWithRabbitMq();
 
-builder.Services.AddMassTransit(x =>
-{
-    x.UsingRabbitMq((context, configurator) =>
-    {
-        var rabbitMQSettings = builder.Configuration
-            .GetSection(nameof(RabbitMQSettings))
-            .Get<RabbitMQSettings>()
-            ?? throw new Exception("RabbitMQ settings missing");
 
-        configurator.Host(rabbitMQSettings.Host);
-        configurator.ConfigureEndpoints(context,new KebabCaseEndpointNameFormatter(serviceSettings!.ServiceName,false));
-    });
-});
+
+
 
 
 builder.Services.AddControllers();

@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿    using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MongoDB.Driver;
 using Rpg.Common.Settings;
