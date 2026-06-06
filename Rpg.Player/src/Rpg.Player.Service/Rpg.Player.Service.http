@@ -1,0 +1,6 @@
+@Rpg.Player.Service_HostAddress = http://localhost:5033
+
+GET {{Rpg.Player.Service_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
